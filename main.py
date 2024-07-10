@@ -3,6 +3,8 @@ import requests
 import json
 import time
 from openai import OpenAI
+import random
+
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 NUTRITIONIX_APP_ID = st.secrets["NUTRITIONIX_APP_ID"]
@@ -94,7 +96,14 @@ def get_assistant_response(chat_history):
             time.sleep(5)
 
 
-st.title("NINA")
+# List of food emojis
+food_emojis = ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦", "🥬", "🥒", "🌶", "🌽", "🥕", "🧄", "🧅", "🥔", "🍠", "🥐", "🥯", "🍞", "🥖", "🥨", "🧀", "🥚", "🍳", "🧈", "🥞", "🧇", "🥓", "🥩", "🍗", "🍖", "🦴", "🌭", "🍔", "🍟", "🍕", "🥪", "🥙", "🧆", "🌮", "🌯", "🥗", "🥘", "🥫", "🍝", "🍜", "🍲", "🍛", "🍣", "🍱", "🥟", "🦪", "🍤", "🍙", "🍚", "🍘", "🍥", "🥮", "🍢", "🍡", "🍧", "🍨", "🍦", "🥧", "🧁", "🍰", "🎂", "🍮", "🍭", "🍬", "🍫", "🍿", "🍩", "🍪", "🌰", "🥜", "🍯"]
+
+# Select a random food emoji
+random_food_emoji = random.choice(food_emojis)
+
+# Display the title with a random food emoji
+st.title(f"{random_food_emoji} NINA - Nutrition Info Navigation Assistant")
 
 # Set a default model
 if "openai_model" not in st.session_state:
@@ -124,7 +133,7 @@ if prompt := st.chat_input("What is up?"):
     
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
-    
+
 
 # import streamlit as st
 # import requests
