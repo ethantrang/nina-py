@@ -4,7 +4,6 @@ import json
 import time
 from openai import OpenAI
 
-
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 NUTRITIONIX_APP_ID = st.secrets["NUTRITIONIX_APP_ID"]
 NUTRITIONIX_API_KEY = st.secrets["NUTRITIONIX_API_KEY"]
