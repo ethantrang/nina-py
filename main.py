@@ -103,7 +103,9 @@ food_emojis = ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "
 random_food_emoji = random.choice(food_emojis)
 
 # Display the title with a random food emoji
-st.title(f"{random_food_emoji} NINA - Nutrition Info Navigation Assistant")
+st.title(f"{random_food_emoji} NINA")
+st.subheader('Nutrition Info Navigation Assistant')
+
 
 # Set a default model
 if "openai_model" not in st.session_state:
@@ -119,7 +121,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # Accept user input
-if prompt := st.chat_input("What is up?"):
+if prompt := st.chat_input("Ask me anything about nutrition!"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
     # Display user message in chat message container
