@@ -6,7 +6,7 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # Copy your application code.
-COPY main.py ./
+COPY app.py ./
 
 # Command to run the FastAPI app using Mangum handler.
-ENTRYPOINT ["main.handler"]
+ENTRYPOINT ["app.handler"]
