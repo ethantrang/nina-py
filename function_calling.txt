@@ -1,0 +1,16 @@
+{
+  "name": "get_nutritional_info",
+  "description": "Search for nutritional info of foods in a query",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "food_query": {
+        "type": "string",
+        "description": "The query containing the names and quantities of food"
+      }
+    },
+    "required": [
+      "food_query"
+    ]
+  }
+}

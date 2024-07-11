@@ -1,1 +1,6 @@
-openai==1.35.12
+fastapi
+requests
+pydantic
+python-dotenv
+uvicorn
+openai
