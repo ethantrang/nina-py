@@ -146,7 +146,7 @@ food_emojis = ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "
 random_food_emoji = random.choice(food_emojis)
 
 # Display the title with a random food emoji
-st.title(f"{random_food_emoji} Chat about Nutrition & Exercise")
+st.title(f"{random_food_emoji} Chat about Nutrition & Exercise ")
 
 # Set a default model
 if "openai_model" not in st.session_state:
