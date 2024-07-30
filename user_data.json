@@ -1,1 +1,35 @@
-{"personal_info": {"full_name": "Ethan Trang", "date_of_birth": "2024-07-28", "gender": "Male", "height": 172, "weight": 70}, "medical_history": {"chronic_conditions": false, "conditions_details": "", "medications": false, "medications_list": "", "surgeries": false, "surgeries_details": "", "allergies": false, "allergies_details": ""}, "lifestyle_habits": {"sleep_hours": "Select", "smoking": false, "alcohol": false, "alcohol_frequency": "", "recreational_drugs": false}, "fitness_activity": {"fitness_level": "Sedentary", "exercise_days_per_week": "3-4", "exercise_types": "Weightlifting, yoga", "injuries": false, "injuries_details": ""}, "dietary_preferences": {"specific_diet": false, "diet_details": "", "meals_per_day": "3", "dietary_supplements": false, "supplements_list": ""}, "preferences_goals": {"preferences": "Vegan low-carb", "goals": "Muscle gain"}, "consent_privacy": {"consent_data_collection": true, "consent_advice": true}}
+{
+    "basic_info": {
+        "name": "Ethan Trang",
+        "age": 18,
+        "gender": "Male",
+        "height": 170,
+        "weight": 64
+    },
+    "health_fitness": {
+        "activity_level": "moderately active (3-5 days)",
+        "goals": "Muscle gain, edurance",
+        "activity_types": "Strength Training",
+        "medical_conditions": "None",
+        "allergies": "None",
+        "dietary_preferences": "Vegan"
+    },
+    "lifestyle": {
+        "sleep": "8+ hours",
+        "stress_level": 5
+    },
+    "fitness_nutrition_data": {
+        "workout_history": "3 days a week strength training",
+        "dietary_intake": "3 meals a day",
+        "water_intake": "2-3 liters/day (standard)",
+        "supplement_use": "None"
+    },
+    "advanced_data": {
+        "heart_rate": "",
+        "daily_steps": ""
+    },
+    "privacy_consent": {
+        "data_collection_consent": true,
+        "data_sharing_preferences": true
+    }
+}
