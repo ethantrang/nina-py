@@ -2,9 +2,30 @@ import streamlit as st
 import json
 import os
 from datetime import datetime, date
+from database.supabase_client import supabase
 
-# Define the path to the JSON file
 USER_DATA_FILE = "user_data.json"
+
+def is_authenticated():
+    try:
+        access_token = st.session_state['access_token']
+        if not access_token:
+            # TODO: try refresh access token 
+            return False
+
+        try:
+            user = supabase.auth.get_user(access_token)
+            if user:
+                st.session_state['user'] = user
+                return True
+        except Exception as e:
+            st.error(f"Authentication failed: {str(e)}")
+            return False
+    except:
+        return False
+    
+
+
 
 # Function to read user data from the JSON file
 def read_user_data():
@@ -56,6 +77,13 @@ def write_user_data(data):
         json.dump(data, file, indent=4)
 
 st.title("⚙️ Your Information")
+
+with st.sidebar:
+
+    st.page_link("pages/1_Chat.py")
+    st.page_link("pages/2_Search.py")
+    st.page_link("pages/3_Your_Information.py")
+    st.page_link("pages/4_Settings.py")
 
 # Load current user data
 user_data = read_user_data()

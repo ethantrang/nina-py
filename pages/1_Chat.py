@@ -1,5 +1,3 @@
-#Chat.py
-
 import streamlit as st
 import requests
 import json
@@ -7,26 +5,40 @@ import time
 from openai import OpenAI
 import random
 import os
+from database.supabase_client import supabase
 
-# Define the path to the JSON file
+
+
 USER_DATA_FILE = "user_data.json"
-
-# Load API keys
-OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 NUTRITIONIX_APP_ID = st.secrets["NUTRITIONIX_APP_ID"]
 NUTRITIONIX_API_KEY = st.secrets["NUTRITIONIX_API_KEY"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
-# Initialize OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-# Function to read user data from the JSON file
+def is_authenticated():
+    try:
+        access_token = st.session_state['access_token']
+        if not access_token:
+            return False
+
+        try:
+            user = supabase.auth.get_user(access_token)
+            if user:
+                st.session_state.user = user
+                return True
+        except Exception as e:
+            st.error(f"Authentication failed: {str(e)}")
+            return False
+    except:
+        return False
+    
 def read_user_data():
     if os.path.exists(USER_DATA_FILE):
         with open(USER_DATA_FILE, "r") as file:
             return json.load(file)
     return {}
 
-# Function to get nutritional information
 def get_nutritional_info(food_query):
     url = "https://trackapi.nutritionix.com/v2/natural/nutrients"
     headers = {
@@ -61,7 +73,6 @@ def get_nutritional_info(food_query):
     else:
         return f"Failed to retrieve nutritional information: {response}"
 
-# Function to get exercise information
 def get_exercise_info(exercise_query):
     url = "https://trackapi.nutritionix.com/v2/natural/exercise"
     headers = {
@@ -85,7 +96,6 @@ def get_exercise_info(exercise_query):
     else:
         return f"Failed to retrieve exercise information: {response.text}"
 
-# Function to get assistant response
 def get_assistant_response(chat_history):
     assistant_id = "asst_Cqp74KANOBsCblHKiNEMXDAg"
     thread = client.beta.threads.create()
@@ -141,30 +151,6 @@ def get_assistant_response(chat_history):
         else:
             time.sleep(5)
 
-
-st.sidebar.header("Welcome to Nina!")
-
-# List of food emojis
-food_emojis = ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦", "🥬", "🥒", "🌶", "🌽", "🥕", "🧄", "🧅", "🥔", "🍠", "🥐", "🥯", "🍞", "🥖", "🥨", "🧀", "🥚", "🍳", "🧈", "🥞", "🧇", "🥓", "🥩", "🍗", "🍖", "🦴", "🌭", "🍔", "🍟", "🍕", "🥪", "🥙", "🧆", "🌮", "🌯", "🥗", "🥘", "🥫", "🍝", "🍜", "🍲", "🍛", "🍣", "🍱", "🥟", "🦪", "🍤", "🍙", "🍚", "🍘", "🍥", "🥮", "🍢", "🍡", "🍧", "🍨", "🍦", "🥧", "🧁", "🍰", "🎂", "🍮", "🍭", "🍬", "🍫", "🍿", "🍩", "🍪", "🌰", "🥜", "🍯"]
-
-# Select a random food emoji
-random_food_emoji = random.choice(food_emojis)
-
-# Display the title with a random food emoji
-st.title(f"{random_food_emoji} Chat about Nutrition & Exercise ")
-
-# Set a default model
-if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
-
-# Initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# Load current user data
-user_data = read_user_data()
-
-# Function to format user data for the assistant
 def format_user_data(user_data):
     return (
         f"User's Personal Information:\n"
@@ -197,6 +183,39 @@ def format_user_data(user_data):
         f"Data Collection Consent: {'Yes' if user_data.get('privacy_consent', {}).get('data_collection_consent', False) else 'No'}\n"
         f"Data Sharing Preferences: {'Yes' if user_data.get('privacy_consent', {}).get('data_sharing_preferences', False) else 'No'}\n"
     )
+
+# UI Elements
+
+if not is_authenticated():
+    st.error("You are not authenticated. Please sign in.")
+    st.switch_page("Home.py")
+
+# List of food emojis
+food_emojis = ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦", "🥬", "🥒", "🌶", "🌽", "🥕", "🧄", "🧅", "🥔", "🍠", "🥐", "🥯", "🍞", "🥖", "🥨", "🧀", "🥚", "🍳", "🧈", "🥞", "🧇", "🥓", "🥩", "🍗", "🍖", "🦴", "🌭", "🍔", "🍟", "🍕", "🥪", "🥙", "🧆", "🌮", "🌯", "🥗", "🥘", "🥫", "🍝", "🍜", "🍲", "🍛", "🍣", "🍱", "🥟", "🦪", "🍤", "🍙", "🍚", "🍘", "🍥", "🥮", "🍢", "🍡", "🍧", "🍨", "🍦", "🥧", "🧁", "🍰", "🎂", "🍮", "🍭", "🍬", "🍫", "🍿", "🍩", "🍪", "🌰", "🥜", "🍯"]
+
+# Select a random food emoji
+random_food_emoji = random.choice(food_emojis)
+
+# Display the title with a random food emoji
+st.title(f"{random_food_emoji} Chat about Nutrition & Exercise ")
+
+# Set a default model
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-3.5-turbo"
+
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Load current user data
+user_data = read_user_data()
+
+with st.sidebar:
+
+    st.page_link("pages/1_Chat.py")
+    st.page_link("pages/2_Search.py")
+    st.page_link("pages/3_Your_Information.py")
+    st.page_link("pages/4_Settings.py")
 
 # Display welcome message if chat history is empty
 if not st.session_state.messages:

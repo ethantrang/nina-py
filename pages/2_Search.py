@@ -1,5 +1,40 @@
 import streamlit as st
 import requests
+from supabase import create_client, Client
+import os 
+
+from database.supabase_client import supabase
+
+# Define session state variables 
+
+if 'search_results' not in st.session_state:
+    st.session_state.search_results = None
+if 'selected_food' not in st.session_state:
+    st.session_state.selected_food = None
+
+# Define functions 
+
+def is_authenticated():
+    try:
+        access_token = st.session_state['access_token']
+        if not access_token:
+            # TODO: try refresh access token 
+            return False
+
+        try:
+            user = supabase.auth.get_user(access_token)
+            if user:
+                st.session_state['user'] = user
+                return True
+        except Exception as e:
+            st.error(f"Authentication failed: {str(e)}")
+            return False
+    except:
+        return False
+    
+if not is_authenticated():
+    st.error("You are not authenticated. Please sign in.")
+    st.switch_page("Home.py")
 
 def search_food(query):
     url = "https://trackapi.nutritionix.com/v2/search/instant"
@@ -53,19 +88,22 @@ def format_nutrient_info(food):
     )
     return formatted
 
+# UI Elements 
+
 st.title("🍔 Search Branded Foods & Restaurants")
 
-# Initialize session state
-if 'search_results' not in st.session_state:
-    st.session_state.search_results = None
-if 'selected_food' not in st.session_state:
-    st.session_state.selected_food = None
 
-# Create two columns
+with st.sidebar:
+
+    st.page_link("pages/1_Chat.py")
+    st.page_link("pages/2_Search.py")
+    st.page_link("pages/3_Your_Information.py")
+    st.page_link("pages/4_Settings.py")
+
+
 col1, col2 = st.columns(2)
 
 with col1:
-    # Step 1: Search for food
 
     search_query = st.text_input("Enter a branded food or restaurant to search:", placeholder="Try 'Big Mac' or 'Starbucks'")
     if st.button("🔍 Search", use_container_width=True):
@@ -74,7 +112,7 @@ with col1:
             if 'error' in results:
                 st.error(results['error'])
             else:
-                st.session_state.search_results = results['branded']  # Limit to 10 results
+                st.session_state.search_results = results['branded']  
                 st.session_state.selected_food = None
                 if st.session_state.search_results:
                     st.success(f"Select one item from the list below to display nutrional information.")
@@ -84,7 +122,6 @@ with col1:
             st.warning("Please enter a food name to search.")
 
 with col1:
-    # Display search results and handle food selection
     if st.session_state.search_results:
         st.subheader("Search Items")
         for food in st.session_state.search_results:
@@ -92,7 +129,6 @@ with col1:
                 st.session_state.selected_food = food['nix_item_id']
 
 with col2:
-    # Step 2: Display nutritional information
     if st.session_state.selected_food:
         st.subheader("📊 Nutritional Information")
         nutrition_info = get_nutrition_info(st.session_state.selected_food)
