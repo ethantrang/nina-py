@@ -7,8 +7,6 @@ import random
 import os
 from database.supabase_client import supabase
 
-
-
 USER_DATA_FILE = "user_data.json"
 NUTRITIONIX_APP_ID = st.secrets["NUTRITIONIX_APP_ID"]
 NUTRITIONIX_API_KEY = st.secrets["NUTRITIONIX_API_KEY"]
@@ -212,6 +210,9 @@ user_data = read_user_data()
 
 with st.sidebar:
 
+    st.header("Welcome, Ethan!")
+
+    st.button("New Chat", use_container_width=True)
     st.page_link("pages/1_Chat.py")
     st.page_link("pages/2_Search.py")
     st.page_link("pages/3_Your_Information.py")
