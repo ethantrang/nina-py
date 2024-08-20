@@ -9,9 +9,9 @@ from streamlit_cookies_manager import EncryptedCookieManager
 load_dotenv()
 
 # Local imports
-import sys 
+import sys
 sys.path.append("/")
-from database.supabase_client import supabase
+from ..database.supabase_client import supabase
 
 st.set_page_config(
     page_title="Nina - Your Nutritional Navigation Assistant",
